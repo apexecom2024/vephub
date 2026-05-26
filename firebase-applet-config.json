@@ -1,10 +1,10 @@
 {
-  "projectId": "youthful-night-4tn3v",
-  "appId": "1:839755975505:web:286106975100298d822170",
-  "apiKey": "AIzaSyCqB9QtRxG40OVi2MXMJZ7qoZYbQAdgfxw",
-  "authDomain": "youthful-night-4tn3v.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-950d7467-c2b9-4235-9707-d4b4f096297a",
-  "storageBucket": "youthful-night-4tn3v.firebasestorage.app",
-  "messagingSenderId": "839755975505",
-  "measurementId": ""
+  apiKey: "AIzaSyDjmcE7CiKrNpSnu20gFB2cG620HU36Zqg",
+  authDomain: "gen-lang-client-0836251512.firebaseapp.com",
+  databaseURL: "https://gen-lang-client-0836251512-default-rtdb.firebaseio.com",
+  projectId: "gen-lang-client-0836251512",
+  storageBucket: "gen-lang-client-0836251512.firebasestorage.app",
+  messagingSenderId: "811711024905",
+  appId: "1:811711024905:web:65c6d67b963f9fec1b8dd8",
+  measurementId: "G-Z597RGXF9K"
 }
