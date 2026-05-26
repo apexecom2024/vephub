@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 1. Reusable helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 2. Validation Blueprints
+    function isValidUser(data) {
+      return data.keys().hasAll(['updatedAt']) &&
+             data.updatedAt == request.time &&
+             (data.get('personaName', '') is string && data.get('personaName', '').size() <= 100) &&
+             (data.get('howToCallYou', '') is string && data.get('howToCallYou', '').size() <= 100) &&
+             (data.get('selectedLanguage', '') is string && data.get('selectedLanguage', '').size() <= 50) &&
+             (data.get('selectedVoice', '') is string && data.get('selectedVoice', '').size() <= 50) &&
+             (data.get('instructions', '') is string && data.get('instructions', '').size() <= 2000) &&
+             (data.get('whatsappDeviceId', '') is string && data.get('whatsappDeviceId', '').size() <= 128);
+    }
+
+    function isValidDevice(data) {
+      return data.keys().hasAll(['device_id', 'state', 'created_at']) &&
+             data.device_id is string && data.device_id.size() <= 128 &&
+             data.state in ['logged_in', 'logged_out', 'pairing'] &&
+             (data.created_at is timestamp || data.created_at == request.time) &&
+             (data.get('phone_number', '') is string && data.get('phone_number', '').size() <= 20) &&
+             (data.get('display_name', '') is string && data.get('display_name', '').size() <= 100) &&
+             (data.get('jid', '') is string && data.get('jid', '').size() <= 128);
+    }
+
+    function isValidChatMessage(data) {
+      return data.keys().hasAll(['role', 'content', 'timestamp']) &&
+             data.role in ['user', 'assistant'] &&
+             data.content is string && data.content.size() <= 5000 &&
+             data.timestamp == request.time;
+    }
+
+    // 3. Collection Rules
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().keys().size() <= 8;
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().keys().size() <= 8;
+      
+      // Sub-collections
+      match /devices/{deviceId} {
+        allow list: if isOwner(userId) && isValidId(userId);
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(deviceId);
+        allow create: if isOwner(userId) && isValidId(userId) && isValidId(deviceId) && isValidDevice(incoming()) && incoming().keys().size() <= 7;
+        allow update: if isOwner(userId) && isValidId(userId) && isValidId(deviceId) && isValidDevice(incoming()) && incoming().keys().size() <= 7;
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(deviceId);
+      }
+      
+      match /history/{messageId} {
+        allow list: if isOwner(userId) && isValidId(userId);
+        allow create: if isOwner(userId) && isValidId(userId) && isValidId(messageId) && isValidChatMessage(incoming()) && incoming().keys().size() <= 4;
+      }
+    }
+  }
+}

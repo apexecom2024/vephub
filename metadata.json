@@ -1,0 +1,11 @@
+{
+  "name": "Remix: Eburon Hub",
+  "description": "Interactive workspace assisted by Beatrice. Speak, share your screen, or upload documents. Integrated multi-device WhatsApp management and secure persistent profiles.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "prompt": "",
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

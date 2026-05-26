@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User preferences and settings for Beatrice.",
+      "type": "object",
+      "properties": {
+        "personaName": { "type": "string", "description": "The name of the AI assistant." },
+        "howToCallYou": { "type": "string", "description": "How Beatrice addresses the user." },
+        "selectedLanguage": { "type": "string", "description": "User's preferred language." },
+        "selectedVoice": { "type": "string", "description": "Voice persona (e.g., superhero, Puck)." },
+        "instructions": { "type": "string", "description": "Custom behavior instructions." },
+        "whatsappDeviceId": { "type": "string", "description": "Active WhatsApp device ID." },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["updatedAt"]
+    },
+    "Device": {
+      "title": "WhatsApp Device",
+      "description": "Multi-device management for WhatsApp.",
+      "type": "object",
+      "properties": {
+        "device_id": { "type": "string" },
+        "phone_number": { "type": "string" },
+        "display_name": { "type": "string" },
+        "state": { "type": "string", "enum": ["logged_in", "logged_out", "pairing"] },
+        "jid": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["device_id", "state", "created_at"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A single entry in the conversation history.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["role", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Root user settings document."
+    },
+    "/users/{userId}/devices/{deviceId}": {
+      "schema": "Device",
+      "description": "Subcollection for multi-device management."
+    },
+    "/users/{userId}/history/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Full conversation history for the user."
+    }
+  }
+}

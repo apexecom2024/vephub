@@ -1,0 +1,42 @@
+{
+  "name": "audio-orb",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node --import tsx server.ts",
+    "dev": "node --import tsx server.ts",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx,.rules"
+  },
+  "dependencies": {
+    "@firebase/eslint-plugin-security-rules": "^0.0.2",
+    "@google/genai": "^1.15.0",
+    "@lit/context": "^1.1.5",
+    "@types/ws": "^8.18.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "firebase": "^12.13.0",
+    "googleapis": "^172.0.0",
+    "lit": "^3.3.0",
+    "three": "^0.176.0",
+    "vite-express": "^0.22.1",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.4.0",
+    "tsx": "^4.22.3",
+    "typescript": "~5.8.2",
+    "typescript-eslint": "^8.60.0",
+    "vite": "^6.2.0"
+  }
+}
